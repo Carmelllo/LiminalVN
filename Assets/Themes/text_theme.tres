@@ -1,0 +1,10 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://bt8oiij4ffiaa"]
+
+[ext_resource type="FontFile" uid="uid://bpv1by73yjr0k" path="res://Assets/Fonts/VCR_OSD_MONO_1.001.ttf" id="1_2203y"]
+
+[resource]
+default_font_size = 68
+Button/fonts/font = ExtResource("1_2203y")
+HeaderLarge/font_sizes/font_size = 56
+Label/font_sizes/font_size = 33
+Label/fonts/font = ExtResource("1_2203y")

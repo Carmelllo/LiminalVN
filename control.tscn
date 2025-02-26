@@ -1,9 +1,42 @@
-[gd_scene load_steps=3 format=3 uid="uid://d4dlbfy80ldpr"]
+[gd_scene load_steps=10 format=3 uid="uid://d4dlbfy80ldpr"]
 
-[sub_resource type="Gradient" id="Gradient_6riw2"]
+[ext_resource type="Script" path="res://Assets/Scripts/control.gd" id="1_afsvc"]
+[ext_resource type="Texture2D" uid="uid://777ythmfi3w6" path="res://Assets/Textures/vhblsi2kcj6a1.jpg" id="1_bbgv7"]
+[ext_resource type="Shader" path="res://Assets/Shaders/control.gdshader" id="2_jaign"]
+[ext_resource type="Theme" uid="uid://bt8oiij4ffiaa" path="res://Assets/Themes/text_theme.tres" id="4_7pmgd"]
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_eca0t"]
-gradient = SubResource("Gradient_6riw2")
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_mdmpq"]
+noise_type = 3
+seed = 6
+frequency = 0.0072
+fractal_lacunarity = 3.08
+fractal_gain = -0.12
+domain_warp_fractal_type = 2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_5q2c4"]
+width = 1024
+height = 1024
+noise = SubResource("FastNoiseLite_mdmpq")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_apgph"]
+noise_type = 3
+frequency = 0.2708
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_5i3h3"]
+width = 1024
+height = 1024
+noise = SubResource("FastNoiseLite_apgph")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_oxqg0"]
+shader = ExtResource("2_jaign")
+shader_parameter/strength = 0.02
+shader_parameter/speed = 0.01
+shader_parameter/aberration_strength = -0.005
+shader_parameter/grain_strength = 0.1
+shader_parameter/flicker_interval = 1.0
+shader_parameter/blur_strength = 0.007
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_5q2c4")
+shader_parameter/noise_texture_grain = SubResource("NoiseTexture2D_5i3h3")
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -12,12 +45,128 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_afsvc")
 
 [node name="Background" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_oxqg0")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = SubResource("GradientTexture2D_eca0t")
+texture = ExtResource("1_bbgv7")
+expand_mode = 1
+
+[node name="MarginContainer2" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -181.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/margin_left = 80
+theme_override_constants/margin_right = 80
+theme_override_constants/margin_bottom = 10
+
+[node name="ActionContainer" type="HBoxContainer" parent="MarginContainer2"]
+layout_mode = 2
+size_flags_horizontal = 4
+alignment = 1
+
+[node name="ActionText" type="Label" parent="MarginContainer2/ActionContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+theme = ExtResource("4_7pmgd")
+theme_type_variation = &"HeaderLarge"
+text = "Go to sleep?:"
+
+[node name="VSeparator" type="VSeparator" parent="MarginContainer2/ActionContainer"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer2/ActionContainer"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="MarginContainer2/ActionContainer/VBoxContainer2"]
+layout_mode = 2
+theme = ExtResource("4_7pmgd")
+theme_type_variation = &"HeaderLarge"
+text = ">"
+horizontal_alignment = 3
+vertical_alignment = 2
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer2/ActionContainer/VBoxContainer2"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="Label" type="Label" parent="MarginContainer2/ActionContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 6
+theme = ExtResource("4_7pmgd")
+theme_type_variation = &"HeaderLarge"
+text = ">"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer2/ActionContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+
+[node name="YES" type="Button" parent="MarginContainer2/ActionContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+theme = ExtResource("4_7pmgd")
+text = "YES"
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer2/ActionContainer/VBoxContainer"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="NO" type="Button" parent="MarginContainer2/ActionContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+theme = ExtResource("4_7pmgd")
+text = "NO"
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 649.0
+grow_horizontal = 2
+theme_override_constants/margin_left = 60
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 60
+
+[node name="TextContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="MarginContainer/TextContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme = ExtResource("4_7pmgd")
+theme_type_variation = &"HeaderLarge"
+text = "???:"
+horizontal_alignment = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/TextContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+
+[node name="Text" type="Label" parent="MarginContainer/TextContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+theme = ExtResource("4_7pmgd")
+theme_type_variation = &"HeaderLarge"
+text = "\"If you dont go to sleep strange things might happen... and if you ever try again to fuck with me you'll see what im capable of...\""
+autowrap_mode = 3
